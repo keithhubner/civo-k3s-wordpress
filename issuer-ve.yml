@@ -1,7 +1,8 @@
 apiVersion: cert-manager.io/v1alpha2
 kind: ClusterIssuer
 metadata:
-  name: letsencrypt-prod-ve
+  name: letsencrypt-prod-wp
+  namespace: wordpress
 spec:
   acme:
     # The ACME server URL
@@ -10,7 +11,7 @@ spec:
     email: keith@hubner.co.uk
     # Name of a secret used to store the ACME account private key
     privateKeySecretRef:
-      name: letsencrypt-prod-ve
+      name: letsencrypt-prod-wp
     # Enable the HTTP-01 challenge provider
     solvers:
     - http01:

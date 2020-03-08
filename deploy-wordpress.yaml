@@ -1,6 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
+  namespace: wordpress
   name: wordpress
   labels:
     app: wordpress
@@ -15,10 +16,10 @@ apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: wordpress-ingress
+  namespace: wordpress
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod-ve
     kubernetes.io/ingress.class: "traefik"
-    #cert-manager.io/cluster-issuer: letsencrypt-staging
+    cert-manager.io/cluster-issuer: letsencrypt-prod-wp
     ingress.kubernetes.io/ssl-redirect: "true"
   labels:
     app: wordpress
@@ -27,19 +28,27 @@ spec:
   - hosts:
     - www.veganeat.co.uk
     - veganeat.co.uk
-    secretName: letsencrypt-prod-ve
+    secretName: letsencrypt-prod-wp
   rules:
-  - host: www.somehost.com
+  - host: www.veganeat.co.uk
     http:
       paths:
       - path: /
         backend:
           serviceName: wordpress
           servicePort: 80
+  - host: veganeat.co.uk
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: wordpress
+          servicePort: 80          
 ---
 apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
 kind: Deployment
 metadata:
+  namespace: wordpress
   name: wordpress
   labels:
     app: wordpress
@@ -77,5 +86,3 @@ spec:
       - name: wordpress-persistent-storage
         persistentVolumeClaim:
           claimName: wordpress-pv-claim
-
-#kubectl cp /tmp/foo wordpress/:/tmp/bar        
