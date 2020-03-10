@@ -26,18 +26,18 @@ metadata:
 spec:
   tls:
   - hosts:
-    - www.veganeat.co.uk
-    - veganeat.co.uk
+    - www.somesite.com
+    - somesite.com
     secretName: letsencrypt-prod-wp
   rules:
-  - host: www.veganeat.co.uk
+  - host: www.somesite.com
     http:
       paths:
       - path: /
         backend:
           serviceName: wordpress
           servicePort: 80
-  - host: veganeat.co.uk
+  - host: somesite.com
     http:
       paths:
       - path: /
