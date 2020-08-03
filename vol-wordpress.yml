@@ -1,3 +1,28 @@
+#Create the PV
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: wordpress-pv2
+  namespace: wordpress
+  labels:
+    name: wordpress-data
+    type: longhorn
+spec:
+  capacity:
+    storage: 10Gi
+  volumeMode: Filesystem
+  storageClassName: longhorn
+  accessModes:
+    - ReadWriteOnce
+  csi:
+    driver: io.rancher.longhorn
+    fsType: ext4
+    volumeAttributes:
+      numberOfReplicates: '3'
+      staleReplicaTimeout: '20'
+    volumeHandle: wordpress-data
+---
+#Create the PVC
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -13,3 +38,4 @@ spec:
   resources:
     requests:
       storage: 5Gi
+  volumeName: "wordpress-pv2"  
